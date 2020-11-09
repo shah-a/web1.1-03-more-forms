@@ -55,8 +55,22 @@ def compliments():
 @app.route('/compliments_results')
 def compliments_results():
     """Show the user some compliments."""
+
+    # Capture inputs from compliments_form.html
+    users_name = request.args.get('users_name')
+    wants_compliments = request.args.get('wants_compliments')
+    num_compliments = int(request.args.get('num_compliments'))
+
+    # Shorthand if-statement to set translate wants_compliments from str to bool
+    wants_compliments = True if wants_compliments == 'yes' else False
+
+    # Randomly generate a subset from list_of_compliments
+    random_compliments = random.sample(list_of_compliments, num_compliments)
+
     context = {
-        # TODO: Enter your context variables here.
+        'users_name': users_name,
+        'wants_compliments': wants_compliments,
+        'random_compliments': random_compliments
     }
 
     return render_template('compliments_results.html', **context)
@@ -67,11 +81,11 @@ def compliments_results():
 ################################################################################
 
 animal_to_fact = {
-    'koala': 'Koala fingerprints are so close to humans\' that they could taint crime scenes.',
-    'parrot': 'Parrots will selflessly help each other out.',
-    'mantis shrimp': 'The mantis shrimp has the world\'s fastest punch.',
-    'lion': 'Female lions do 90 percent of the hunting.',
-    'narwhal': 'Narwhal tusks are really an "inside out" tooth.'
+    'koala': "Koala fingerprints are so close to humans' that they could taint crime scenes.",
+    'parrot': "Parrots will selflessly help each other out.",
+    'mantis shrimp': "The mantis shrimp has the world's fastest punch.",
+    'lion': "Female lions do 90 percent of the hunting.",
+    'narwhal': "Narwhal tusks are really an \"inside out\" tooth."
 }
 
 @app.route('/animal_facts')
@@ -85,6 +99,7 @@ def animal_facts():
         # - the list of all animals (get from animal_to_fact)
         # - the chosen animal fact (may be None if the user hasn't filled out the form yet)
     }
+
     return render_template('animal_facts.html', **context)
 
 
@@ -111,6 +126,7 @@ def save_image(image, filter_type):
 
     # Construct full file path
     file_path = os.path.join(app.root_path, 'static/images', file_name)
+    # file_path = os.path.join(app.root_path, 'static/images', new_file_name)
     
     # Save the image
     image.save(file_path)
@@ -134,29 +150,31 @@ def image_filter():
         
         # TODO: Get the user's chosen filter type (whichever one they chose in the form) and save
         # as a variable
-        filter_type = ''
+        filter_type = request.form.get('filter_type')
         
         # Get the image file submitted by the user
         image = request.files.get('users_image')
 
         # TODO: call `save_image()` on the image & the user's chosen filter type, save the returned
         # value as the new file path
+        file_path = save_image(image, filter_type)
 
         # TODO: Call `apply_filter()` on the file path & filter type
+        apply_filter(file_path, filter_type)
 
         image_url = f'/static/images/{filter_type}-{image.filename}'
+        # image_url = f'/static/images/{image.filename}'
 
         context = {
-            # TODO: Add context variables here for:
-            # - The full list of filter types
-            # - The image URL
+            'filters': filter_types,
+            'image_url': image_url
         }
 
         return render_template('image_filter.html', **context)
 
     else: # if it's a GET request
         context = {
-            # TODO: Add context variable here for the full list of filter types
+            'filters': filter_types
         }
         return render_template('image_filter.html', **context)
 
@@ -176,6 +194,9 @@ def gif_search():
         # TODO: Get the search query & number of GIFs requested by the user, store each as a 
         # variable
 
+        search_query = request.form.get("search_query")
+        quantity = int(request.form.get("quantity"))
+
         response = requests.get(
             TENOR_URL,
             {
@@ -183,6 +204,9 @@ def gif_search():
                 # - 'q': the search query
                 # - 'key': the API key (defined above)
                 # - 'limit': the number of GIFs requested
+                'q': search_query,
+                'key': API_KEY,
+                'limit': quantity
             })
 
         gifs = json.loads(response.content).get('results')
