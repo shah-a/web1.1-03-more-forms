@@ -56,7 +56,7 @@ def compliments():
 def compliments_results():
     """Show the user some compliments."""
 
-    # Get inputs from compliments_form.html
+    # Get user inputs from compliments_form.html
     users_name = request.args.get('users_name')
     wants_compliments = request.args.get('wants_compliments')
     num_compliments = int(request.args.get('num_compliments'))
@@ -79,7 +79,7 @@ def compliments_results():
 # ANIMAL FACTS ROUTE
 ################################################################################
 
-animal_to_fact = {
+animals_and_facts = {
     'koala': "Koala fingerprints are so close to humans' that they could taint crime scenes.",
     'parrot': "Parrots will selflessly help each other out.",
     'mantis shrimp': "The mantis shrimp has the world's fastest punch.",
@@ -91,12 +91,14 @@ animal_to_fact = {
 def animal_facts():
     """Show a form to choose an animal and receive facts."""
 
-    # TODO: Collect the form data and save as variables
+    # Generate list of keys and get user input from animal_facts.html
+    animals = animals_and_facts.keys()
+    users_animals = request.args.getlist('animal')
 
     context = {
-        # TODO: Enter your context variables here for:
-        # - the list of all animals (get from animal_to_fact)
-        # - the chosen animal fact (may be None if the user hasn't filled out the form yet)
+        'animals': animals,
+        'users_animals': users_animals,
+        'animals_and_facts': animals_and_facts,
     }
 
     return render_template('animal_facts.html', **context)

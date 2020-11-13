@@ -31,14 +31,12 @@ Gif Search
 
 {% if gifs %}
   <section id="form_results">
-    <p>
-      Here are your GIFs:
-    </p>
+    <p>Here are your GIFs:</p>
 
     {% for gif in gifs %}
-    <p>
-      <img src="{{ gif['media'][0]['gif']['url'] }}" alt="GIF">
-    </p>
+      <p>
+        <img src="{{ gif['media'][0]['gif']['url'] }}" alt="GIF">
+      </p>
     {% endfor %}
 
   </section>

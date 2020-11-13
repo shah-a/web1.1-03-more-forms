@@ -6,34 +6,32 @@ Animal Facts
 
 {% block content %}
 <h1>Animal Facts</h1>
+
 <form action="/animal_facts" method="GET">
   <fieldset>
     <legend>Your Info:</legend>
 
     <label>
-      Which animal do you want facts on?
-
-      <!-- TODO: Use a for loop to show one option element for each 
-        animal. -->
-      <select name="animal">
-        <option value="koala">koala</option>
+      Which animals do you want facts on?
+      <select name="animal" multiple>
+        {% for animal in animals %}
+          <option value="{{ animal }}">{{ animal }}</option>
+        {% endfor %}
       </select>
     </label>
 
-    <input type="submit" value="Get Fact!">
+    <input type="submit" value="Get Facts!">
   </fieldset>
 </form>
 
-<!-- TODO: If an animal was chosen, show the section below with the appropriate 
-  animal fact. -->
-
+{% if users_animals %}
 <section id="form_results">
-  <p>
-    Here is your animal fact:
-  </p>
-  <p>
-    <em>Your animal fact goes here.</em>
-  </p>
+  <p>Here are your animal facts:</p>
+
+  {% for animal in users_animals %}
+    <p><em>{{ animals_and_facts[animal] }}</em></p>
+  {% endfor %}
 </section>
+{% endif %}
 
 {% endblock %}
