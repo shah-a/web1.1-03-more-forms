@@ -6,41 +6,40 @@ Image Filtering
 
 {% block content %}
 <h1>Image Filtering</h1>
+
 <form action="/image_filter" method="POST" enctype="multipart/form-data">
-    <fieldset>
-        <legend>Your Info:</legend>
-        
-        <p>
-            <label>
-                Upload a file here (of file type .png, .jpeg, or .gif):
+  <fieldset>
+    <legend>Your Info:</legend>
+    <p>
+      <label>
+        Upload a file here (of file type .png, .jpeg, or .gif):
+        <input type="file" name="users_image" accept="image/png, image/jpeg, image/gif">
+      </label>
+    </p>
 
-                <input type="file" name="users_image" accept="image/png, image/jpeg, image/gif">
-            </label>
-        </p>
-        <p>
-            <label>
-                Select your filter:
+    <p>
+      <label>
+        Select your filter:
+        <select name="filter_type">
+          {% for filter in filters %}
+            <option value="{{ filter }}">{{ filter }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </p>
 
-                <select name="filter_type">
-                    {% for filter in filters %}
-                    <option value="{{ filter }}">{{ filter }}</option>
-                    {% endfor %}
-                </select>
-            </label>
-        </p>
-
-        <input type="submit" value="Filter My Image!">
-    </fieldset>
+    <input type="submit" value="Filter My Image!">
+  </fieldset>
 </form>
 
 {% if image_url %}
 <section id="form_results">
-    <p>
-        Here is your filtered image:
-    </p>
-    <p>
-        <img src="{{ image_url }}">
-    </p>
+  <p>
+    Here is your filtered image:
+  </p>
+  <p>
+    <img src="{{ image_url }}" alt="Filtered Image">
+  </p>
 </section>
 {% endif %}
 

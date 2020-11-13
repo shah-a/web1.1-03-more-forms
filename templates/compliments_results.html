@@ -6,12 +6,14 @@ Compliments Results
 
 {% block content %}
 <p>Hi {{ users_name }} :)</p>
+
 {% if wants_compliments %}
-<p>You are:</p>
-<ul>
-  {% for compliment in random_compliments %}
-    <li>{{ compliment }}</li>
-  {% endfor %}
-</ul>
+  <p>You are:</p>
+  <ul>
+    {% for compliment in random_compliments %}
+      <li>{{ compliment }}</li>
+    {% endfor %}
+  </ul>
 {% endif %}
+
 {% endblock %}
